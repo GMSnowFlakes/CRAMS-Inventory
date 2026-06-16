@@ -2,38 +2,38 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - name: MySQL Setup
+  - name: CRAMS App
     init: |
+      # Start MySQL (gitpod user has full access by default)
       sudo service mysql start
-      mysql -u root -e "CREATE DATABASE IF NOT EXISTS crams; CREATE USER IF NOT EXISTS 'crams'@'localhost' IDENTIFIED BY 'secret'; GRANT ALL ON crams.* TO 'crams'@'localhost'; FLUSH PRIVILEGES;"
+      mysql -u gitpod -e "CREATE DATABASE IF NOT EXISTS crams;"
 
-  - name: Backend
-    init: |
-      cd /workspace/CRAMS-Marketplace
-      composer install --no-interaction --prefer-dist
+      # Backend setup
+      composer install --no-interaction --prefer-dist --quiet
       cp .env.example .env
-      sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env
-      sed -i 's/DB_DATABASE=.*/DB_DATABASE=crams/' .env
-      sed -i 's/DB_USERNAME=.*/DB_USERNAME=crams/' .env
-      sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=secret/' .env
-      sed -i 's/MAIL_ENABLED=.*/MAIL_ENABLED=false/' .env
-      php artisan key:generate
+      sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
+      sed -i 's/^DB_HOST=.*/DB_HOST=127.0.0.1/' .env
+      sed -i 's/^DB_DATABASE=.*/DB_DATABASE=crams/' .env
+      sed -i 's/^DB_USERNAME=.*/DB_USERNAME=gitpod/' .env
+      sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=/' .env
+      sed -i 's/^MAIL_ENABLED=.*/MAIL_ENABLED=false/' .env
+      php artisan key:generate --force
       php artisan migrate --seed --force
       php artisan storage:link
-    command: php artisan serve --host=0.0.0.0 --port=8000
 
-  - name: Frontend
-    init: |
-      cd /workspace/CRAMS-Marketplace
-      npm ci
-    command: npm run dev
+      # Frontend build
+      npm ci --silent
+      npm run build
+
+      echo "✅ CRAMS is ready!"
+
+    command: |
+      sudo service mysql start
+      php artisan serve --host=0.0.0.0 --port=8000
 
 ports:
   - port: 8000
     onOpen: open-browser
-    visibility: public
-  - port: 5173
-    onOpen: ignore
     visibility: public
 
 vscode:
