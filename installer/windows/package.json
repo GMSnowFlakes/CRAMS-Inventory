@@ -1,0 +1,12 @@
+{
+  "name": "crams-installer",
+  "version": "1.0.0",
+  "bin": "./installer.cjs",
+  "pkg": {
+    "targets": [
+      "node18-win-x64"
+    ],
+    "outputPath": "C:\\Users\\marcp\\Downloads\\Crams-Inventory\\crams\\installer\\windows\\dist",
+    "assets": []
+  }
+}
