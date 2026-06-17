@@ -1,5 +1,9 @@
 # CRAMS — Inventory Management System
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/GMSnowFlakes/CRAMS-Inventory?quickstart=1)
+
+> **Live demo** — click the button above. The environment builds automatically (~3 min) and opens CRAMS in your browser. Login: `admin@demo.com` / `password`
+
 **Complete multi-branch inventory for small and medium businesses**
 
 CRAMS is a full-featured inventory and business operations platform built on Laravel 13 + React. It covers everything from purchase orders and point-of-sale to forecasting, compliance, and franchise management — all in a single, self-hosted application.
