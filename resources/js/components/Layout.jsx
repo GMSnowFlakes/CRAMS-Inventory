@@ -32,6 +32,7 @@ const nav = [
     { to: '/franchise',       label: 'Franchise',         icon: '🏢' },
     { to: '/supplier-portal', label: 'Supplier Portal',   icon: '🔗' },
     { to: '/settings',        label: 'Settings',         icon: '⚙' },
+    { to: '/updates',         label: 'System Updates',   icon: '⬆' },
 ];
 
 const NavIcon = ({ to }) => {

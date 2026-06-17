@@ -37,6 +37,7 @@ import RecallsPage from './pages/recalls/RecallsPage';
 import SupplierPortalPage from './pages/supplier-portal/SupplierPortalPage';
 import SupplierPortalView from './pages/supplier-portal/SupplierPortalView';
 import FranchisePage from './pages/franchise/FranchisePage';
+import UpdaterPage from './pages/updater/UpdaterPage';
 import './app.css';
 
 const queryClient = new QueryClient({
@@ -81,6 +82,7 @@ createRoot(document.getElementById('app')).render(
                         <Route path="/supplier-portal/*" element={<ProtectedRoute><LicenseGate><SupplierPortalPage /></LicenseGate></ProtectedRoute>} />
                         <Route path="/supplier-portal/:token" element={<SupplierPortalView />} />
                         <Route path="/franchise/*" element={<ProtectedRoute><LicenseGate><FranchisePage /></LicenseGate></ProtectedRoute>} />
+                        <Route path="/updates"         element={<ProtectedRoute><UpdaterPage /></ProtectedRoute>} />
                         <Route path="/profile"         element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
                     </Routes>
                 </BrowserRouter>

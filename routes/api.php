@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Modules\Updater\Controllers\UpdaterController;
 use App\Modules\Approvals\Controllers\ApprovalController;
 use App\Modules\AuditLogs\Controllers\AuditLogController;
 use App\Modules\Compliance\Controllers\ComplianceController;
@@ -182,4 +183,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/supplier-portal/tokens',           [SupplierPortalController::class, 'index']);
     Route::post('/supplier-portal/tokens',          [SupplierPortalController::class, 'store']);
     Route::delete('/supplier-portal/tokens/{id}',   [SupplierPortalController::class, 'destroy']);
+
+    // System Updater
+    Route::get('/updater/check',   [UpdaterController::class, 'check']);
+    Route::post('/updater/apply',  [UpdaterController::class, 'update']);
 });
