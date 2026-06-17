@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-echo "→ Installing PHP extensions..."
-sudo apt-get update -qq
-sudo apt-get install -y -qq php8.3-sqlite3 php8.3-zip php8.3-intl php8.3-bcmath php8.3-gd php8.3-curl php8.3-xml php8.3-mbstring 2>/dev/null || true
-
 echo "→ Installing Composer dependencies..."
 composer install --no-interaction --prefer-dist --optimize-autoloader
 
@@ -49,9 +45,8 @@ php artisan crams:setup \
     --company="Demo Company" \
     --name="Demo Admin" \
     --email="admin@demo.com" \
-    --password="password" 2>/dev/null || true
+    --password="password" || true
 
 echo ""
-echo "✅ CRAMS is ready!"
-echo "   Login: admin@demo.com / password"
+echo "✅ CRAMS is ready! Login: admin@demo.com / password"
 php artisan serve --host=0.0.0.0 --port=8000
