@@ -133,11 +133,14 @@ async function installPhp() {
     ini = ini
         .replace(';extension=sqlite3',      'extension=sqlite3')
         .replace(';extension=pdo_sqlite',   'extension=pdo_sqlite')
+        .replace(';extension=pdo_mysql',    'extension=pdo_mysql')
         .replace(';extension=mbstring',     'extension=mbstring')
         .replace(';extension=openssl',      'extension=openssl')
         .replace(';extension=curl',         'extension=curl')
         .replace(';extension=fileinfo',     'extension=fileinfo')
         .replace(';extension=gd',           'extension=gd')
+        .replace(';extension=zip',          'extension=zip')
+        .replace(';extension=intl',         'extension=intl')
         .replace(';extension_dir = "./"',   `extension_dir = "${PHP_DIR}\\ext"`)
         .replace('upload_max_filesize = 2M','upload_max_filesize = 10M')
         .replace('post_max_size = 8M',      'post_max_size = 10M');
@@ -250,7 +253,7 @@ async function main() {
     ok('Storage configured');
 
     // ── Step 4: Account setup ─────────────────────────────
-    step('4/6', 'Company & Admin Account');
+    step('4/5', 'Company & Admin Account');
     console.log('');
 
     const company   = await ask('Company name:       ');
@@ -261,26 +264,19 @@ async function main() {
 
     if (adminPass !== adminPass2) fail('Passwords do not match.');
 
-    // ── Step 5: License key ───────────────────────────────
-    step('5/6', 'License Activation');
-    console.log('');
-    const licenseKey = await ask('Paste your license key:\n  ');
-
-    // ── Step 6: Install ───────────────────────────────────
-    step('6/6', 'Installing');
+    // ── Step 5: Install ───────────────────────────────────
+    step('5/5', 'Installing');
     console.log('');
 
-    info('Creating admin account and activating license...');
+    info('Creating admin account...');
     php(phpExe, [
         'artisan', 'crams:setup',
         `--company=${company}`,
         `--name=${adminName}`,
         `--email=${adminEmail}`,
         `--password=${adminPass}`,
-        `--license=${licenseKey}`,
     ], installDir);
     ok('Admin account created');
-    ok('License activated');
 
     // Create launcher batch file
     const launcherPath = path.join(installDir, 'Start CRAMS.bat');

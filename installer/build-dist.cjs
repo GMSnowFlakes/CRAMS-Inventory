@@ -137,9 +137,16 @@ try {
     warn('Windows .exe build skipped — install pkg first: npm install -g pkg\n');
 }
 
+// ── Step 6: Copy prerequisite checker ────────────────────
+info('Copying prerequisite checker...');
+const checkPhp = path.join(__dirname, 'check-requirements.php');
+fs.copyFileSync(checkPhp, path.join(DIST, 'check-requirements.php'));
+ok('check-requirements.php copied\n');
+
 // ── Summary ───────────────────────────────────────────────
 console.log(' Distribution ready in: dist/');
 console.log(' ══════════════════════\n');
-console.log('  dist/crams-app.zip      ← required by both installers');
-console.log('  dist/CRAMS-Setup.exe    ← Windows: distribute with crams-app.zip');
-console.log('  dist/install.sh         ← Linux: distribute with crams-app.zip\n');
+console.log('  dist/crams-app.zip            ← required by both installers');
+console.log('  dist/CRAMS-Setup.exe          ← Windows: distribute with crams-app.zip');
+console.log('  dist/install.sh               ← Linux: distribute with crams-app.zip');
+console.log('  dist/check-requirements.php   ← drop on server to verify before install\n');

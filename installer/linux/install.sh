@@ -45,7 +45,7 @@ ok "Detected: $DISTRO-based system"
 # ── Install PHP ───────────────────────────────────────────
 step "2/7" "Installing PHP 8.3"
 
-PHP_EXTENSIONS="php8.3 php8.3-cli php8.3-fpm php8.3-sqlite3 php8.3-mbstring php8.3-xml php8.3-curl php8.3-zip php8.3-bcmath php8.3-gd"
+PHP_EXTENSIONS="php8.3 php8.3-cli php8.3-fpm php8.3-sqlite3 php8.3-mbstring php8.3-xml php8.3-curl php8.3-zip php8.3-bcmath php8.3-gd php8.3-intl php8.3-tokenizer"
 
 if command -v php &>/dev/null && php -r "exit(version_compare(PHP_VERSION,'8.2','>=') ? 0 : 1);" 2>/dev/null; then
     ok "PHP $(php -r 'echo PHP_VERSION;') already installed"
@@ -142,14 +142,11 @@ if [ "$ADMIN_PASS" != "$ADMIN_PASS2" ]; then
     fail "Passwords do not match."
 fi
 
-read -rp "  License key (paste here): " LICENSE_KEY
-
 php "$INSTALL_DIR/artisan" crams:setup \
     --company="$COMPANY" \
     --name="$ADMIN_NAME" \
     --email="$ADMIN_EMAIL" \
-    --password="$ADMIN_PASS" \
-    --license="$LICENSE_KEY"
+    --password="$ADMIN_PASS"
 
 php "$INSTALL_DIR/artisan" storage:link --force
 
