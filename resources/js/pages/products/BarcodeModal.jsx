@@ -46,7 +46,7 @@ export default function BarcodeModal({ product, onClose }) {
     };
 
     return (
-        <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
+        <div className="modal-overlay" onMouseDown={e => e.target === e.currentTarget && onClose()}>
             <div className="modal-box" style={{ maxWidth: 480, padding: 28 }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
                     <h2 style={{ fontWeight: 600, fontSize: '1rem' }}>Barcode — {product.name}</h2>

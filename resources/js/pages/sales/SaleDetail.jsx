@@ -93,7 +93,7 @@ export default function SaleDetail({ id, onClose }) {
     const canPay  = ['confirmed', 'partial'].includes(sale.status);
 
     return (
-        <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
+        <div className="modal-overlay" onMouseDown={e => e.target === e.currentTarget && onClose()}>
             <div className="modal-box" style={{ maxWidth: 660, margin: '0 16px' }}>
                 {/* Header */}
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '20px 24px 0' }}>

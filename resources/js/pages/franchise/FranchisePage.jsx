@@ -204,8 +204,8 @@ export default function FranchisePage() {
 
             {/* Add Franchise Modal */}
             {showModal && (
-                <div className="modal-overlay" onClick={() => setShowModal(false)}>
-                    <div className="modal-box" style={{ maxWidth: 440 }} onClick={e => e.stopPropagation()}>
+                <div className="modal-overlay" onMouseDown={() => setShowModal(false)}>
+                    <div className="modal-box" style={{ maxWidth: 440 }} onMouseDown={e => e.stopPropagation()}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                             <h2 style={{ fontSize: '1.0625rem', fontWeight: 700, color: 'var(--text-1)' }}>Add Franchise Branch</h2>
                             <button onClick={() => setShowModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-3)', fontSize: '1.25rem' }}>×</button>

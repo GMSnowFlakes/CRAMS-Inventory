@@ -39,7 +39,7 @@ export default function TransferOrderForm({ onClose, onSaved }) {
     const inputStyle = { padding: '8px 10px', border: '1.5px solid var(--border)', borderRadius: 'var(--radius-sm)', fontSize: '0.8125rem', color: 'var(--text-1)', background: 'var(--surface)', width: '100%', outline: 'none' };
 
     return (
-        <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
+        <div className="modal-overlay" onMouseDown={e => e.target === e.currentTarget && onClose()}>
             <div className="modal-box" style={{ maxWidth: 640, margin: '0 16px' }}>
                 <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <h2 style={{ fontWeight: 600, fontSize: '1rem' }}>New Transfer Order</h2>

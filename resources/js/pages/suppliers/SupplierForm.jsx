@@ -25,7 +25,7 @@ export default function SupplierForm({ supplier, onClose, onSaved }) {
     const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
     return (
-        <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
+        <div className="modal-overlay" onMouseDown={e => e.target === e.currentTarget && onClose()}>
             <div className="modal-box" style={{ maxWidth: 460, margin: '0 16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px 0' }}>
                     <h2 style={{ fontSize: '1.0625rem', fontWeight: 600, color: 'var(--text-1)' }}>{supplier ? 'Edit Supplier' : 'New Supplier'}</h2>

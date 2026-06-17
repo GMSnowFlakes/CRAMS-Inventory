@@ -36,7 +36,7 @@ export default function ProductForm({ product, onClose, onSaved }) {
     const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
     return (
-        <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
+        <div className="modal-overlay" onMouseDown={e => e.target === e.currentTarget && onClose()}>
             <div className="modal-box" style={{ maxWidth: 520, margin: '0 16px' }}>
                 {/* Header */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px 0' }}>

@@ -119,7 +119,7 @@ function KitCard({ kit, onSelect }) {
 
 function ConfirmModal({ kit, isPending, error, onConfirm, onCancel }) {
     return (
-        <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onCancel()}>
+        <div className="modal-overlay" onMouseDown={e => e.target === e.currentTarget && onCancel()}>
             <div className="modal-box" style={{ maxWidth: 440, margin: '0 16px' }}>
                 <div style={{ padding: '24px 24px 0', textAlign: 'center' }}>
                     <div style={{ fontSize: '3rem', marginBottom: 12 }}>{kit.icon}</div>

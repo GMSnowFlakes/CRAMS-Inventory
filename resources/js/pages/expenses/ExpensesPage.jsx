@@ -146,7 +146,7 @@ function ImportModal({ onClose, onDone }) {
     };
 
     return (
-        <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
+        <div className="modal-overlay" onMouseDown={e => e.target === e.currentTarget && onClose()}>
             <div className="modal-box" style={{ maxWidth: 500, margin: '0 16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px 0' }}>
                     <h2 style={{ fontSize: '1.0625rem', fontWeight: 600, color: 'var(--text-1)' }}>Import Expenses (CSV)</h2>
@@ -365,7 +365,7 @@ export default function ExpensesPage() {
             )}
 
             {modal && (
-                <div className="modal-overlay" onClick={e => e.target === e.currentTarget && setModal(null)}>
+                <div className="modal-overlay" onMouseDown={e => e.target === e.currentTarget && setModal(null)}>
                     <div className="modal-box" style={{ maxWidth: 560, margin: '0 16px' }}>
                         <div style={{ padding: '20px 24px 0', fontWeight: 700, fontSize: '1rem', marginBottom: 20 }}>
                             {modal === 'new' ? 'Add Expense' : 'Edit Expense'}
