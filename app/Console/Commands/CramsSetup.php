@@ -24,9 +24,11 @@ class CramsSetup extends Command
         $adminEmail  = $this->option('email')    ?? $this->ask('Admin email');
         $adminPass   = $this->option('password') ?? $this->secret('Admin password');
 
+        $slug = strtolower(preg_replace('/[^a-z0-9]+/i', '-', trim($companyName)));
+
         $company = Company::firstOrCreate(
-            ['name' => $companyName],
-            ['name' => $companyName]
+            ['slug' => $slug],
+            ['name' => $companyName, 'slug' => $slug]
         );
 
         User::updateOrCreate(
