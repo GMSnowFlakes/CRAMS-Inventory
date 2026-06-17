@@ -11,12 +11,14 @@ echo "→ Building frontend..."
 npm run build
 
 echo "→ Configuring environment..."
-cat > .env << 'EOF'
+CODESPACE_URL="https://${CODESPACE_NAME}-8000.app.github.dev"
+cat > .env << EOF
 APP_NAME=CRAMS
 APP_ENV=local
 APP_KEY=
 APP_DEBUG=true
-APP_URL=http://localhost:8000
+APP_URL=${CODESPACE_URL}
+ASSET_URL=${CODESPACE_URL}
 
 DB_CONNECTION=sqlite
 DB_DATABASE=/workspaces/CRAMS-Inventory/database/database.sqlite
