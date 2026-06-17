@@ -2,7 +2,7 @@
 
 **Complete multi-branch inventory for small and medium businesses**
 
-CRAMS is a full-featured inventory and business operations platform built on Laravel 11 + React. It covers everything from purchase orders and point-of-sale to forecasting, compliance, and franchise management — all in a single, self-hosted application.
+CRAMS is a full-featured inventory and business operations platform built on Laravel 13 + React. It covers everything from purchase orders and point-of-sale to forecasting, compliance, and franchise management — all in a single, self-hosted application.
 
 ---
 
@@ -41,6 +41,7 @@ CRAMS is a full-featured inventory and business operations platform built on Lar
 | Dependency | Minimum version |
 |------------|----------------|
 | PHP | 8.3 |
+| PHP Extensions | mbstring, xml, curl, zip, bcmath, intl, gd, pdo_mysql |
 | Composer | 2.x |
 | Node.js | 18.x |
 | Database | SQLite (dev) / MySQL 8+ / PostgreSQL 15+ (production) |
@@ -80,6 +81,19 @@ The app will be available at `http://localhost:8000`. Default admin credentials 
 
 ---
 
+## System Updates
+
+CRAMS includes a built-in one-click updater. Once installed, go to **Settings → System Updates** (or navigate to `/updates`) in the admin panel.
+
+- The app checks GitHub Releases for the latest version automatically
+- Shows the version number, release date, and full changelog
+- One click downloads, extracts, and applies the update — including running any new migrations
+- No SSH or technical knowledge required for buyers
+
+**Required PHP extension:** `php-zip` (ZipArchive) must be enabled on the server for updates to work. This is included in most shared hosting PHP packages and all standard VPS setups.
+
+---
+
 ## Screenshots
 
 > Screenshots coming soon.
@@ -90,7 +104,7 @@ The app will be available at `http://localhost:8000`. Default admin credentials 
 
 | Layer | Technology |
 |-------|-----------|
-| Backend | Laravel 11 (PHP 8.3) |
+| Backend | Laravel 13 (PHP 8.3) |
 | Frontend | React 18 + Vite |
 | API | Laravel Sanctum (SPA token auth) |
 | Database | SQLite / MySQL / PostgreSQL |
