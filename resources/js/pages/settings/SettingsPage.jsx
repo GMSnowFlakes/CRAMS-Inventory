@@ -48,11 +48,6 @@ export default function SettingsPage() {
         },
     });
 
-    const license = useQuery({
-        queryKey: ['license-status'],
-        queryFn:  () => client.get('/license/status').then(r => r.data),
-    });
-
     const uploadLogo = useMutation({
         mutationFn: (file) => {
             const fd = new FormData();
@@ -267,61 +262,6 @@ export default function SettingsPage() {
                         </div>
                     ) : (
                         <p style={{ fontSize: '0.875rem', color: 'var(--text-1)' }}>{taxRate}%</p>
-                    )}
-                </div>
-
-                {/* ── License ── */}
-                <div className="card" style={{ padding: 24 }}>
-                    <h2 style={{ fontSize: '0.9375rem', fontWeight: 600, color: 'var(--text-1)', marginBottom: 4 }}>License</h2>
-                    <p style={{ fontSize: '0.8125rem', color: 'var(--text-3)', marginBottom: 20 }}>
-                        Current license details for this installation.
-                    </p>
-
-                    {license.isLoading ? (
-                        <div style={{ display: 'flex', gap: 6 }}>
-                            {[0,1,2].map(i => <span key={i} className="loading-dot" style={{ animationDelay: `${i*0.2}s` }} />)}
-                        </div>
-                    ) : license.data?.valid ? (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span style={{ fontSize: '0.8125rem', color: 'var(--text-3)' }}>Plan</span>
-                                <span className={`badge ${TIER_BADGE[license.data.tier] ?? 'badge-gray'}`} style={{ textTransform: 'capitalize' }}>
-                                    {license.data.tier}
-                                </span>
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <span style={{ fontSize: '0.8125rem', color: 'var(--text-3)' }}>Max users</span>
-                                <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-1)' }}>
-                                    {license.data.max_users === 0 ? 'Unlimited' : license.data.max_users}
-                                </span>
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <span style={{ fontSize: '0.8125rem', color: 'var(--text-3)' }}>Expires</span>
-                                <span style={{ fontSize: '0.875rem', fontWeight: 600, color: license.data.expiring_soon ? 'var(--amber)' : 'var(--text-1)' }}>
-                                    {license.data.expires_at}
-                                </span>
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <span style={{ fontSize: '0.8125rem', color: 'var(--text-3)' }}>Days remaining</span>
-                                <span style={{ fontSize: '0.875rem', fontWeight: 600, color: license.data.days_remaining <= 30 ? 'var(--amber)' : 'var(--green)' }}>
-                                    {license.data.days_remaining}d
-                                </span>
-                            </div>
-                            {license.data.expiring_soon && (
-                                <div style={{
-                                    padding: '10px 12px',
-                                    background: 'var(--amber-light)',
-                                    borderRadius: 'var(--radius-sm)',
-                                    borderLeft: '3px solid var(--amber)',
-                                    fontSize: '0.8125rem',
-                                    color: '#92400e',
-                                }}>
-                                    License expiring soon. Contact your vendor for a renewal key.
-                                </div>
-                            )}
-                        </div>
-                    ) : (
-                        <div className="alert-error">License is not active or has expired.</div>
                     )}
                 </div>
 

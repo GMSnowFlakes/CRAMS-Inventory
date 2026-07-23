@@ -1,9 +1,9 @@
 {
-    "name": "CRAMS Inventory",
+    "name": "InventoryOS",
     "image": "mcr.microsoft.com/devcontainers/universal:2",
     "forwardPorts": [8000],
     "portsAttributes": {
-        "8000": { "label": "CRAMS App", "onAutoForward": "openBrowser" }
+        "8000": { "label": "InventoryOS App", "onAutoForward": "openBrowser" }
     },
     "postCreateCommand": "bash .devcontainer/setup.sh"
 }

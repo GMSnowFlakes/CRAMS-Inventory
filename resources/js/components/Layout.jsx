@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../context/AuthContext';
@@ -75,6 +75,8 @@ export default function Layout({ children }) {
 
     const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+    const navRef = useRef(null);
 
     useEffect(() => {
         const handler = () => {
@@ -91,6 +93,14 @@ export default function Layout({ children }) {
         if (isMobile) setMobileOpen(false);
     };
 
+    // Preserve nav scroll position on re-renders
+    const [navScrollTop, setNavScrollTop] = useState(0);
+    useEffect(() => {
+        if (navRef.current) {
+            navRef.current.scrollTop = navScrollTop;
+        }
+    }, [navScrollTop]);
+
     const { data: branding } = useQuery({
         queryKey: ['branding'],
         queryFn:  () => client.get('/settings/branding').then(r => r.data),
@@ -98,8 +108,17 @@ export default function Layout({ children }) {
     });
 
     const handleLogout = async () => {
+        setShowLogoutConfirm(true);
+    };
+
+    const confirmLogout = async () => {
+        setShowLogoutConfirm(false);
         await logout();
         navigate('/login');
+    };
+
+    const cancelLogout = () => {
+        setShowLogoutConfirm(false);
     };
 
     const initials = user?.name
@@ -177,19 +196,14 @@ export default function Layout({ children }) {
                         />
                     ) : (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <div style={{
-                                width: 32, height: 32, borderRadius: 8,
-                                background: 'var(--sidebar-accent)',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                flexShrink: 0,
-                            }}>
-                                <svg viewBox="0 0 20 20" fill="white" width="16" height="16">
-                                    <path d="M3 3a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 13.846 4.632 16 6.414 16H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 5H6.28l-.31-1.243A1 1 0 005 3H3z"/>
-                                </svg>
-                            </div>
+                            <img
+                                src="/logo.png"
+                                alt="InventoryOS"
+                                style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'cover', flexShrink: 0 }}
+                            />
                             <div>
                                 <div style={{ color: '#f8fafc', fontWeight: 700, fontSize: '0.9375rem', letterSpacing: '-0.02em' }}>
-                                    {branding?.company_name ?? 'CRAMS'}
+                                    {branding?.company_name ?? 'InventoryOS'}
                                 </div>
                                 <div style={{ color: 'var(--sidebar-text)', fontSize: '0.6875rem', marginTop: 1 }}>Inventory Platform</div>
                             </div>
@@ -198,8 +212,8 @@ export default function Layout({ children }) {
                 </div>
 
                 {/* Nav */}
-                <nav style={{ flex: 1, padding: '12px 10px', overflowY: 'auto' }}>
-                    {nav.filter(({ to }) => {
+                 <nav ref={navRef} style={{ flex: 1, padding: '12px 10px', overflowY: 'auto' }} onScroll={e => setNavScrollTop(e.target.scrollTop)}>
+                     {nav.filter(({ to }) => {
                         if (to === '/audit-logs' && !can('viewAuditLogs')) return false;
                         if (to === '/settings'   && !can('manageUsers'))   return false;
                         return true;
@@ -320,6 +334,47 @@ export default function Layout({ children }) {
             }}>
                 {children}
             </main>
+
+            {/* Logout Confirmation Modal */}
+            {showLogoutConfirm && (
+                <div style={{
+                    position: 'fixed', inset: 0, zIndex: 2000,
+                    background: 'rgba(0,0,0,0.5)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }} onClick={cancelLogout}>
+                    <div style={{
+                        background: 'var(--surface-1)',
+                        padding: 24, borderRadius: 12,
+                        minWidth: 320, maxWidth: 400,
+                        boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)',
+                    }} onClick={e => e.stopPropagation()}>
+                        <h3 style={{ margin: 0, fontSize: 18, fontWeight: 600, color: 'var(--text-1)', marginBottom: 8 }}>
+                            Sign Out
+                        </h3>
+                        <p style={{ color: 'var(--text-3)', fontSize: 14, marginBottom: 24 }}>
+                            Are you sure you want to sign out?
+                        </p>
+                        <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
+                            <button onClick={cancelLogout} style={{
+                                padding: '8px 20px', borderRadius: 8,
+                                background: 'var(--surface-2)', color: 'var(--text-2)',
+                                border: '1px solid var(--border)', cursor: 'pointer',
+                                fontSize: 14, fontWeight: 500,
+                            }}>
+                                Cancel
+                            </button>
+                            <button onClick={confirmLogout} style={{
+                                padding: '8px 20px', borderRadius: 8,
+                                background: '#ef4444', color: '#fff',
+                                border: 'none', cursor: 'pointer',
+                                fontSize: 14, fontWeight: 500,
+                            }}>
+                                Sign Out
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

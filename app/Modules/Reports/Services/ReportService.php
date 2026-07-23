@@ -565,7 +565,7 @@ class ReportService
             ->where('purchase_orders.company_id', $companyId)
             ->whereIn('purchase_orders.status', ['received', 'partial'])
             ->whereBetween('purchase_orders.order_date', [$from, $to])
-            ->sum(DB::raw('purchase_order_items.quantity * purchase_order_items.unit_cost'));
+            ->sum(DB::raw('purchase_order_items.quantity_ordered * purchase_order_items.unit_cost'));
 
         return [
             'revenue'       => round($revenue, 2),

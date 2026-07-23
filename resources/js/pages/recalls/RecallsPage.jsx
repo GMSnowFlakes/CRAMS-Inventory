@@ -47,6 +47,13 @@ export default function RecallsPage() {
         queryFn: () => client.get('/recalls' + (filter ? `?status=${filter}` : '')).then(r => r.data),
     });
 
+    const { data: products } = useQuery({
+        queryKey: ['recalls-products'],
+        queryFn: () => client.get('/products', { params: { is_active: true } }).then(r => r.data.data ?? r.data ?? []),
+    });
+
+    const [formError, setFormError] = useState('');
+
     const create = useMutation({
         mutationFn: (d) => client.post('/recalls', d).then(r => r.data),
         onSuccess: () => {
@@ -54,6 +61,13 @@ export default function RecallsPage() {
             qc.invalidateQueries({ queryKey: ['recalls-active-count'] });
             setShowCreate(false);
             setForm(emptyForm);
+            setFormError('');
+        },
+        onError: (err) => {
+            const msg = err.response?.data?.message
+                || (err.response?.data?.errors && Object.values(err.response.data.errors).join(', '))
+                || 'Failed to create recall.';
+            setFormError(msg);
         },
     });
 
@@ -150,9 +164,13 @@ export default function RecallsPage() {
                         <div style={{ background: 'var(--surface)', borderRadius: 12, padding: 32, width: 500, maxWidth: '95vw' }}>
                             <h2 style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-1)', marginBottom: 20 }}>New Recall Notice</h2>
                             <form onSubmit={e => { e.preventDefault(); create.mutate({ ...form, affected_qty: Number(form.affected_qty) }); }} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                                {formError && <div style={{ background: 'var(--red-light)', color: 'var(--red)', padding: '8px 12px', borderRadius: 8, fontSize: 13 }}>{formError}</div>}
                                 <div>
-                                    <label style={labelStyle}>Product ID *</label>
-                                    <input type="number" required value={form.product_id} onChange={e => setForm(f => ({ ...f, product_id: e.target.value }))} style={inputStyle} placeholder="Enter product ID" />
+                                    <label style={labelStyle}>Product *</label>
+                                    <select required value={form.product_id} onChange={e => setForm(f => ({ ...f, product_id: e.target.value }))} style={inputStyle}>
+                                        <option value="">Select a product</option>
+                                        {(products ?? []).map(p => <option key={p.id} value={p.id}>{p.name}{p.sku ? ` (${p.sku})` : ''}</option>)}
+                                    </select>
                                 </div>
                                 <div>
                                     <label style={labelStyle}>Title *</label>

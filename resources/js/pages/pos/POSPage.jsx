@@ -3,6 +3,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import Layout from '../../components/Layout';
 import api from '../../api/client';
 import { useCurrency } from '../../hooks/useCurrency';
+import { printDocument } from '../../utils/printTemplate';
 import { useToast } from '../../context/ToastContext';
 
 const emptyCart = () => [];
@@ -119,28 +120,27 @@ export default function POSPage() {
     });
 
     const handlePrintReceipt = (sale) => {
-        const w = window.open('', '_blank', 'width=400,height=600');
-        w.document.write(`<!DOCTYPE html><html><head><title>Receipt</title><style>
-            body{font-family:monospace;font-size:13px;padding:16px;max-width:300px}
-            h2{text-align:center;font-size:15px;margin:0 0 4px}
-            .center{text-align:center}.hr{border:none;border-top:1px dashed #999;margin:8px 0}
-            .row{display:flex;justify-content:space-between}
-            .total{font-weight:bold;font-size:15px}
-        </style></head><body>
-        <h2>${branding?.company_name ?? 'Receipt'}</h2>
-        <div class="center" style="color:#666;margin-bottom:8px">${new Date().toLocaleString()}</div>
-        <div class="center">Invoice: ${sale.invoice_number}</div>
-        <hr class="hr"/>
-        ${(sale.items ?? []).map(it => `<div class="row"><span>${it.product?.name} x${it.quantity}</span><span>${it.total?.toFixed(2)}</span></div>`).join('')}
-        <hr class="hr"/>
-        <div class="row total"><span>Total</span><span>${parseFloat(sale.total).toFixed(2)}</span></div>
-        <div class="row"><span>Paid</span><span>${parseFloat(sale.amount_paid).toFixed(2)}</span></div>
-        ${(parseFloat(sale.amount_paid) - parseFloat(sale.total)) > 0.001 ? `<div class="row"><span>Change</span><span>${(parseFloat(sale.amount_paid) - parseFloat(sale.total)).toFixed(2)}</span></div>` : ''}
-        <hr class="hr"/>
-        <div class="center" style="margin-top:8px">Thank you!</div>
-        </body></html>`);
-        w.document.close();
-        setTimeout(() => w.print(), 250);
+        const rows = (sale.items ?? []).map(it => `
+            <tr>
+                <td>${it.product?.name ?? '—'} x${it.quantity}</td>
+                <td style="text-align:right">${Number(it.total ?? 0).toFixed(2)}</td>
+            </tr>`).join('');
+        const balance = parseFloat(sale.amount_paid) - parseFloat(sale.total);
+        printDocument({
+            title: 'Receipt',
+            subtitle: `${sale.invoice_number} &bull; ${new Date().toLocaleString()}`,
+            companyName: branding?.company_name ?? 'InventoryOS',
+            width: 400,
+            height: 600,
+            body: `
+                <table><tbody>${rows}</tbody></table>
+                <div class="totals">
+                    <div class="grand row"><span>Total</span><span>${parseFloat(sale.total).toFixed(2)}</span></div>
+                    <div class="row" style="color:#059669"><span>Paid</span><span>${parseFloat(sale.amount_paid).toFixed(2)}</span></div>
+                    ${balance > 0.001 ? `<div class="row" style="color:#d97706"><span>Change</span><span>${balance.toFixed(2)}</span></div>` : ''}
+                </div>
+                <div class="doc-footer" style="margin-top:24px;border:none">Thank you for your purchase!</div>`,
+        });
     };
 
     useEffect(() => {

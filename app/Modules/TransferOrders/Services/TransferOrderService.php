@@ -23,9 +23,9 @@ class TransferOrderService
 
         if (!empty($filters['search'])) {
             $q->where(function ($sq) use ($filters) {
-                $sq->where('transfer_number', 'ilike', "%{$filters['search']}%")
-                   ->orWhereHas('fromBranch', fn ($b) => $b->where('name', 'ilike', "%{$filters['search']}%"))
-                   ->orWhereHas('toBranch',   fn ($b) => $b->where('name', 'ilike', "%{$filters['search']}%"));
+                $sq->where('transfer_number', 'like', "%{$filters['search']}%")
+                   ->orWhereHas('fromBranch', fn ($b) => $b->where('name', 'like', "%{$filters['search']}%"))
+                   ->orWhereHas('toBranch',   fn ($b) => $b->where('name', 'like', "%{$filters['search']}%"));
             });
         }
 

@@ -1,18 +1,89 @@
 {
     "$schema": "https://www.schemastore.org/package.json",
+    "name": "inventoryos",
+    "version": "1.0.0",
+    "description": "InventoryOS - Inventory Management System by CRAMS Creative",
+    "author": "CRAMS Creative",
     "private": true,
     "type": "module",
+    "main": "electron/main.cjs",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "electron:dev": "concurrently \"php artisan serve --port=8765\" \"wait-on http://127.0.0.1:8765 && electron .\"",
+        "electron:build": "vite build && electron-builder --win",
+        "electron:start": "electron ."
+    },
+    "build": {
+        "appId": "com.cramscreative.inventoryos",
+        "productName": "InventoryOS",
+        "asar": false,
+        "directories": {
+            "output": "dist-electron"
+        },
+        "files": [
+            "electron/main.cjs",
+            "electron/updater.cjs",
+            "app/**/*",
+            "bootstrap/**/*",
+            "config/**/*",
+            "database/**/*",
+            "public/**/*",
+            "resources/**/*",
+            "routes/**/*",
+            "storage/**/*",
+            "!storage/logs/*.log",
+            "vendor/**/*",
+            "composer.json",
+            "composer.lock",
+            "artisan",
+            "package.json",
+            ".env"
+        ],
+        "extraResources": [
+            {
+                "from": "electron/php",
+                "to": "php",
+                "filter": [
+                    "**/*"
+                ]
+            },
+            {
+                "from": "electron/icon.ico",
+                "to": "icon.ico"
+            }
+        ],
+        "win": {
+            "target": "nsis",
+            "icon": "electron/icon.ico"
+        },
+        "nsis": {
+            "oneClick": false,
+            "allowToChangeInstallationDirectory": true,
+            "createDesktopShortcut": true,
+            "createStartMenuShortcut": true,
+            "shortcutName": "InventoryOS"
+        },
+        "publish": {
+            "provider": "github",
+            "owner": "GMSnowFlakes",
+            "repo": "CRAMS-Inventory"
+        }
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.3.0",
         "@vitejs/plugin-react": "^6.0.2",
-        "concurrently": "^9.0.1",
+        "concurrently": "^9.2.4",
+        "cross-env": "^10.1.0",
+        "electron": "^43.1.1",
+        "electron-builder": "^26.15.3",
+        "electron-updater": "^6.8.9",
         "laravel-vite-plugin": "^3.1",
+        "sharp": "^0.35.3",
         "tailwindcss": "^4.3.0",
-        "vite": "^8.0.0"
+        "to-ico": "^1.1.5",
+        "vite": "^8.0.0",
+        "wait-on": "^9.0.10"
     },
     "dependencies": {
         "@tanstack/react-query": "^5.101.0",

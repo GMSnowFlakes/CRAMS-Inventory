@@ -15,7 +15,7 @@ class CramsSetup extends Command
         {--email=    : Admin email}
         {--password= : Admin password}';
 
-    protected $description = 'Initial CRAMS setup: create company and admin account';
+    protected $description = 'Initial InventoryOS setup: create company and admin account';
 
     public function handle(): int
     {

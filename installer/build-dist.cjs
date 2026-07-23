@@ -1,11 +1,11 @@
 /**
- * CRAMS Distribution Builder
+ * InventoryOS Distribution Builder
  * --------------------------
  * Produces:
  *   dist/
- *   ├── crams-app.zip      ← pre-built app bundle (no Node/Composer needed by client)
- *   ├── CRAMS-Setup.exe    ← Windows installer
- *   └── install.sh         ← Linux installer
+ *   ├── inventoryos-app.zip      ← pre-built app bundle (no Node/Composer needed by client)
+ *   ├── InventoryOS-Setup.exe    ← Windows installer
+ *   └── install.sh               ← Linux installer
  *
  * Usage:  node installer/build-dist.cjs
  * Prereq: vendor/ must already exist (composer install --no-dev was run)
@@ -68,7 +68,7 @@ function rmDir(p) {
 }
 
 // ── Step 1: Build frontend ────────────────────────────────
-console.log('\n CRAMS Distribution Builder');
+console.log('\n InventoryOS Distribution Builder');
 console.log(' ══════════════════════════\n');
 
 info('Building frontend assets...');
@@ -101,19 +101,19 @@ fs.writeFileSync(path.join(STAGING, 'database', '.gitkeep'), '');
 ok('Files staged\n');
 
 // ── Step 3: Zip staging dir ───────────────────────────────
-info('Creating crams-app.zip...');
+info('Creating inventoryos-app.zip...');
 fs.mkdirSync(DIST, { recursive: true });
-const appZip = path.join(DIST, 'crams-app.zip');
+const appZip = path.join(DIST, 'inventoryos-app.zip');
 rmDir(appZip);
 
 execSync(
-    `powershell -NoProfile -Command "Compress-Archive -Path '${STAGING}\\*' -DestinationPath '${appZip}' -CompressionLevel Optimal"`,
+    `tar -a -cf "${appZip}" -C "${STAGING}" .`,
     { stdio: 'ignore' }
 );
 rmDir(STAGING);
 
 const sizeMB = (fs.statSync(appZip).size / 1024 / 1024).toFixed(1);
-ok(`crams-app.zip created (${sizeMB} MB)\n`);
+ok(`inventoryos-app.zip created (${sizeMB} MB)\n`);
 
 // ── Step 4: Copy Linux installer ─────────────────────────
 info('Copying Linux installer...');
@@ -128,10 +128,10 @@ try {
         cwd: path.join(__dirname, 'windows'),
         stdio: 'inherit',
     });
-    const exeSrc = path.join(__dirname, 'windows', 'dist', 'CRAMS-Setup.exe');
+    const exeSrc = path.join(__dirname, 'windows', 'dist', 'InventoryOS-Setup.exe');
     if (fs.existsSync(exeSrc)) {
-        fs.copyFileSync(exeSrc, path.join(DIST, 'CRAMS-Setup.exe'));
-        ok('CRAMS-Setup.exe copied\n');
+        fs.copyFileSync(exeSrc, path.join(DIST, 'InventoryOS-Setup.exe'));
+        ok('InventoryOS-Setup.exe copied\n');
     }
 } catch {
     warn('Windows .exe build skipped — install pkg first: npm install -g pkg\n');
@@ -146,7 +146,7 @@ ok('check-requirements.php copied\n');
 // ── Summary ───────────────────────────────────────────────
 console.log(' Distribution ready in: dist/');
 console.log(' ══════════════════════\n');
-console.log('  dist/crams-app.zip            ← required by both installers');
-console.log('  dist/CRAMS-Setup.exe          ← Windows: distribute with crams-app.zip');
-console.log('  dist/install.sh               ← Linux: distribute with crams-app.zip');
+console.log('  dist/inventoryos-app.zip        ← required by both installers');
+console.log('  dist/InventoryOS-Setup.exe       ← Windows: distribute with inventoryos-app.zip');
+console.log('  dist/install.sh                  ← Linux: distribute with inventoryos-app.zip');
 console.log('  dist/check-requirements.php   ← drop on server to verify before install\n');

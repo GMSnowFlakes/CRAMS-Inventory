@@ -7,12 +7,12 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$Repo = "GMSnowFlakes/CRAMS-Inventory"
+$Repo = "GMSnowFlakes/InventoryOS"
 $ProjectDir = $PSScriptRoot
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "  CRAMS Release Tool" -ForegroundColor Cyan
+Write-Host "  InventoryOS Release Tool" -ForegroundColor Cyan
 Write-Host "  Version: v$Version" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
@@ -49,7 +49,7 @@ Write-Host "        Pushed." -ForegroundColor Green
 Write-Host "[ 5/5 ] Creating GitHub release v$Version..." -ForegroundColor Yellow
 gh release create "v$Version" `
     --repo $Repo `
-    --title "CRAMS v$Version" `
+    --title "InventoryOS v$Version" `
     --notes $Notes `
     --latest
 Write-Host "        GitHub release created." -ForegroundColor Green
@@ -57,6 +57,6 @@ Write-Host "        GitHub release created." -ForegroundColor Green
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Green
 Write-Host "  Release v$Version published!" -ForegroundColor Green
-Write-Host "  All CRAMS installs will see the update." -ForegroundColor Green
+Write-Host "  All InventoryOS installs will see the update." -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green
 Write-Host ""

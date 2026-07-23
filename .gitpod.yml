@@ -2,18 +2,18 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - name: CRAMS App
+  - name: InventoryOS App
     init: |
       # Start MySQL (gitpod user has full access by default)
       sudo service mysql start
-      mysql -u gitpod -e "CREATE DATABASE IF NOT EXISTS crams;"
+      mysql -u gitpod -e "CREATE DATABASE IF NOT EXISTS inventoryos;"
 
       # Backend setup
       composer install --no-interaction --prefer-dist --quiet
       cp .env.example .env
       sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
       sed -i 's/^DB_HOST=.*/DB_HOST=127.0.0.1/' .env
-      sed -i 's/^DB_DATABASE=.*/DB_DATABASE=crams/' .env
+      sed -i 's/^DB_DATABASE=.*/DB_DATABASE=inventoryos/' .env
       sed -i 's/^DB_USERNAME=.*/DB_USERNAME=gitpod/' .env
       sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=/' .env
       sed -i 's/^MAIL_ENABLED=.*/MAIL_ENABLED=false/' .env
@@ -25,7 +25,7 @@ tasks:
       npm ci --silent
       npm run build
 
-      echo "✅ CRAMS is ready!"
+      echo "✅ InventoryOS is ready!"
 
     command: |
       sudo service mysql start

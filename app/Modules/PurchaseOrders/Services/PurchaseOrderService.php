@@ -26,8 +26,8 @@ class PurchaseOrderService
         }
         if (!empty($filters['search'])) {
             $q->where(function ($sq) use ($filters) {
-                $sq->where('po_number', 'ilike', "%{$filters['search']}%")
-                   ->orWhereHas('supplier', fn ($s) => $s->where('name', 'ilike', "%{$filters['search']}%"));
+                $sq->where('po_number', 'like', "%{$filters['search']}%")
+                   ->orWhereHas('supplier', fn ($s) => $s->where('name', 'like', "%{$filters['search']}%"));
             });
         }
 

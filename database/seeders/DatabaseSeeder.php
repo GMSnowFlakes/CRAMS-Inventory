@@ -13,17 +13,17 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $company = Company::create([
-            'name'      => 'CRAMS Demo Company',
-            'slug'      => 'crams-demo',
-            'email'     => 'demo@crams.app',
+            'name'      => 'My Company',
+            'slug'      => 'my-company',
+            'email'     => null,
             'currency'  => 'USD',
             'is_active' => true,
         ]);
 
         User::create([
             'company_id' => $company->id,
-            'name'       => 'Admin User',
-            'email'      => 'admin@crams.app',
+            'name'       => 'Administrator',
+            'email'      => 'admin@inventoryos.app',
             'password'   => Hash::make('password'),
             'role'       => 'admin',
         ]);

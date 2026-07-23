@@ -17,8 +17,8 @@ class ProductService
 
         if (!empty($filters['search'])) {
             $query->where(function ($q) use ($filters) {
-                $q->where('name', 'ilike', "%{$filters['search']}%")
-                  ->orWhere('sku', 'ilike', "%{$filters['search']}%");
+                $q->where('name', 'like', "%{$filters['search']}%")
+                  ->orWhere('sku', 'like', "%{$filters['search']}%");
             });
         }
 

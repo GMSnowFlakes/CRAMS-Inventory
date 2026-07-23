@@ -13,7 +13,7 @@ npm run build
 echo "→ Configuring environment..."
 CODESPACE_URL="https://${CODESPACE_NAME}-8000.app.github.dev"
 cat > .env << EOF
-APP_NAME=CRAMS
+APP_NAME=InventoryOS
 APP_ENV=local
 APP_KEY=
 APP_DEBUG=true
@@ -21,7 +21,7 @@ APP_URL=${CODESPACE_URL}
 ASSET_URL=${CODESPACE_URL}
 
 DB_CONNECTION=sqlite
-DB_DATABASE=/workspaces/CRAMS-Inventory/database/database.sqlite
+DB_DATABASE=/workspaces/InventoryOS/database/database.sqlite
 
 CACHE_STORE=file
 SESSION_DRIVER=file
@@ -50,5 +50,5 @@ php artisan crams:setup \
     --password="password" || true
 
 echo ""
-echo "✅ CRAMS is ready! Login: admin@demo.com / password"
+echo "✅ InventoryOS is ready! Login: admin@demo.com / password"
 php artisan serve --host=0.0.0.0 --port=8000

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DemoController;
 use App\Modules\Updater\Controllers\UpdaterController;
 use App\Modules\Approvals\Controllers\ApprovalController;
 use App\Modules\AuditLogs\Controllers\AuditLogController;
@@ -36,6 +37,12 @@ Route::get('/settings/branding', [SettingController::class, 'branding']);
 
 // Public — supplier portal view (no auth)
 Route::get('/supplier-portal/view/{token}', [SupplierPortalPublicController::class, 'show']);
+
+// Public — live demo (Hyperbeam)
+Route::post('/demo/start', [DemoController::class, 'start']);
+Route::post('/demo/end',   [DemoController::class, 'end']);
+
+// Demo auto-login route moved to routes/web.php (must run before SPA catch-all)
 
 Route::post('/auth/login', [AuthController::class, 'login']);
 

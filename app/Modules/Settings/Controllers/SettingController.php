@@ -14,7 +14,7 @@ class SettingController extends Controller
     public function branding(): JsonResponse
     {
         return response()->json([
-            'company_name'     => Setting::get('company_name', 'CRAMS'),
+            'company_name'     => Setting::get('company_name', 'InventoryOS'),
             'logo_url'         => Setting::get('logo_url'),
             'primary_color'    => Setting::get('primary_color'),
             'currency_symbol'  => Setting::get('currency_symbol', '$'),

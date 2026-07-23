@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../../api/client';
 import { useCurrency } from '../../hooks/useCurrency';
 import { useToast } from '../../context/ToastContext';
+import { printDocument } from '../../utils/printTemplate';
 
 const PAYMENT_METHODS = ['cash','card','bank_transfer','gcash','check','other'];
 
@@ -55,7 +56,6 @@ export default function PurchaseOrderDetail({ id, onClose }) {
 
     const handlePrint = () => {
         if (!po) return;
-        const w = window.open('', '_blank', 'width=800,height=600');
         const rows = (po.items ?? []).map(item => `
             <tr>
                 <td>${item.product?.name ?? '—'}</td>
@@ -63,34 +63,27 @@ export default function PurchaseOrderDetail({ id, onClose }) {
                 <td style="text-align:right">${Number(item.unit_price).toFixed(2)}</td>
                 <td style="text-align:right">${(item.quantity * item.unit_price).toFixed(2)}</td>
             </tr>`).join('');
-        w.document.write(`<!DOCTYPE html><html><head><title>PO ${po.po_number}</title>
-<style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:Arial,sans-serif;font-size:13px;color:#111;padding:32px}
-  h1{font-size:20px;margin-bottom:4px}
-  table{width:100%;border-collapse:collapse;margin-top:16px}
-  th{background:#f3f4f6;text-align:left;padding:8px 10px;font-size:11px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #e5e7eb}
-  td{padding:8px 10px;border-bottom:1px solid #f3f4f6}
-  .totals{margin-top:16px;text-align:right;font-size:14px}
-  .totals div{margin-bottom:4px}
-  .grand{font-size:18px;font-weight:700;margin-top:8px}
-  @media print{body{padding:0}}
-</style></head><body>
-<h1>Purchase Order</h1>
-<p style="color:#555;margin-bottom:16px">PO# ${po.po_number} &bull; ${po.order_date} &bull; Status: ${po.status}</p>
-<div style="margin-bottom:12px"><strong>Supplier:</strong> ${po.supplier?.name ?? '—'}</div>
-<table><thead><tr><th>Product</th><th style="text-align:right">Qty</th><th style="text-align:right">Unit Price</th><th style="text-align:right">Total</th></tr></thead>
-<tbody>${rows}</tbody></table>
-<div class="totals">
-  <div>Subtotal: ${Number(po.subtotal ?? 0).toFixed(2)}</div>
-  <div>Tax: ${Number(po.tax_amount ?? 0).toFixed(2)}</div>
-  <div class="grand">Total: ${Number(po.total).toFixed(2)}</div>
-  <div style="color:#059669">Paid: ${Number(po.amount_paid ?? 0).toFixed(2)}</div>
-  <div style="color:#d97706">Balance: ${(Number(po.total) - Number(po.amount_paid ?? 0)).toFixed(2)}</div>
-</div>
-<script>window.onload=()=>{window.print();}</script>
-</body></html>`);
-        w.document.close();
+        const statusBadge = po.status ? `<span class="badge badge-${po.status}">${po.status}</span>` : '';
+        printDocument({
+            title: 'Purchase Order',
+            subtitle: `PO# ${po.po_number} &bull; ${po.order_date} &bull; ${statusBadge}`,
+            companyName: po.supplier?.name ?? 'InventoryOS',
+            body: `
+                <div class="doc-section">
+                    <div class="doc-section-title">Supplier</div>
+                    <div>${po.supplier?.name ?? '—'}</div>
+                </div>
+                <table><thead><tr>
+                    <th>Product</th><th style="text-align:right">Qty</th><th style="text-align:right">Unit Price</th><th style="text-align:right">Total</th>
+                </tr></thead><tbody>${rows}</tbody></table>
+                <div class="totals">
+                    <div class="row"><span>Subtotal</span><span>${Number(po.subtotal ?? 0).toFixed(2)}</span></div>
+                    <div class="row"><span>Tax</span><span>${Number(po.tax_amount ?? 0).toFixed(2)}</span></div>
+                    <div class="grand row"><span>Total</span><span>${Number(po.total).toFixed(2)}</span></div>
+                    <div class="row" style="color:#059669"><span>Paid</span><span>${Number(po.amount_paid ?? 0).toFixed(2)}</span></div>
+                    <div class="row" style="color:#d97706"><span>Balance</span><span>${(Number(po.total) - Number(po.amount_paid ?? 0)).toFixed(2)}</span></div>
+                </div>`,
+        });
     };
 
     if (isLoading) return (

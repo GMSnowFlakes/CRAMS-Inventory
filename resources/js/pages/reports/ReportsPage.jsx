@@ -485,7 +485,7 @@ function ExportsTab({ from, to, setFrom, setTo }) {
                 XLSX.utils.book_append_sheet(wb, ws4, 'Cash Flow Impact');
             }
 
-            XLSX.writeFile(wb, `crams-inventory-report-${today}.xlsx`);
+            XLSX.writeFile(wb, `inventoryos-report-${today}.xlsx`);
         } finally {
             setBusy(null);
         }

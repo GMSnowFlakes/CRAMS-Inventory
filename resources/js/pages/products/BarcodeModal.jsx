@@ -12,16 +12,21 @@ export default function BarcodeModal({ product, onClose }) {
 
     const printLabels = (barcode, name, sku, qty = 1) => {
         const rows = Array.from({ length: qty }, () => `
-            <div style="border:1px solid #ccc;display:inline-block;padding:8px 12px;margin:4px;text-align:center;width:180px;font-family:monospace;">
-                <div style="font-size:11px;font-weight:700;margin-bottom:4px">${name}</div>
-                <div style="font-size:10px;color:#555;margin-bottom:4px">${sku}</div>
-                <div style="font-size:18px;font-weight:700;letter-spacing:2px">${barcode}</div>
+            <div style="border:1px solid #e2e8f0;border-radius:8px;display:inline-block;padding:10px 14px;margin:4px;text-align:center;width:200px;font-family:'Inter',Arial,sans-serif;">
+                <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:6px">
+                    <img src="${window.location.origin}/logo.png" style="width:18px;height:18px;border-radius:4px" onerror="this.style.display='none'">
+                    <span style="font-size:10px;font-weight:700;color:#0f172a">InventoryOS</span>
+                </div>
+                <div style="font-size:11px;font-weight:700;margin-bottom:2px;color:#1e293b">${name}</div>
+                <div style="font-size:10px;color:#64748b;margin-bottom:4px">${sku}</div>
+                <div style="font-size:18px;font-weight:700;letter-spacing:2px;color:#0f172a">${barcode}</div>
             </div>`).join('');
         const w = window.open('', '_blank', 'width=640,height=500');
-        w.document.write(`<!DOCTYPE html><html><head><title>Labels</title></head><body>
-            <div style="padding:16px">${rows}</div>
-            <script>window.onload=()=>window.print()<\/script>
-        </body></html>`);
+        w.document.write(`<!DOCTYPE html><html><head><title>Labels</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}body{padding:16px;font-family:'Inter',Arial,sans-serif}</style>
+</head><body><div>${rows}</div>
+<script>window.onload=()=>window.print()<\/script>
+</body></html>`);
         w.document.close();
     };
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>@yield('subject', 'CRAMS Notification')</title>
+    <title>@yield('subject', 'InventoryOS Notification')</title>
     <style>
         body {
             margin: 0;
@@ -137,7 +137,7 @@
     <div class="container">
 
         <div class="header">
-            <span class="logo">CRAMS<span> Inventory</span></span>
+            <span class="logo">InventoryOS</span>
         </div>
 
         <div class="body">
@@ -145,7 +145,7 @@
         </div>
 
         <div class="footer">
-            <p><strong>CRAMS Inventory Platform</strong></p>
+            <p><strong>InventoryOS Platform</strong></p>
             <p>This is an automated notification. Please do not reply to this email.</p>
         </div>
 

@@ -1,4 +1,4 @@
-# CRAMS Marketplace — Claude Instructions
+# InventoryOS — Claude Instructions
 
 ## Release Automation
 
@@ -7,7 +7,7 @@ After ANY code change is completed and confirmed working, automatically run the 
 ### How to release
 
 ```powershell
-cd "C:\Users\marcp\Downloads\CRAMS-Marketplace"
+cd "C:\Users\marcp\Downloads\InventoryOS"
 .\release.ps1 -Version "X.X.X" -Notes "Brief description of what changed"
 ```
 
@@ -35,7 +35,7 @@ Write the `-Notes` value as a short plain-English summary of what changed. Examp
 2. Builds the frontend (`npm run build`)
 3. Commits all changes
 4. Pushes to GitHub
-5. Creates a GitHub release — all installed CRAMS instances see the update
+5. Creates a GitHub release — all installed InventoryOS instances see the update
 
 ### Do not release if
 
@@ -45,7 +45,7 @@ Write the `-Notes` value as a short plain-English summary of what changed. Examp
 
 ## Project context
 
-- Repo: `GMSnowFlakes/CRAMS-Inventory` on GitHub
-- Stack: Laravel 13 + React 18 + MySQL
-- Sold on micron.io as a self-hosted inventory management system
+- Repo: `GMSnowFlakes/InventoryOS` on GitHub
+- Stack: Laravel 13 + React 19 + MySQL
+- Sold on www.cramscreative.com as a self-hosted inventory management system
 - Buyers update via the **System Updates** page inside the admin panel (`/updates`)

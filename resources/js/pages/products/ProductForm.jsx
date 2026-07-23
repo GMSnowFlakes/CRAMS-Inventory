@@ -30,8 +30,21 @@ export default function ProductForm({ product, onClose, onSaved }) {
             ? client.put(`/products/${product.id}`, payload)
             : client.post('/products', payload),
         onSuccess: () => { qc.invalidateQueries({ queryKey: ['products'] }); onSaved?.(); onClose(); },
-        onError: (err) => setError(err.response?.data?.message ?? 'Something went wrong.'),
+        onError: (err) => {
+            const msg = err.response?.data?.message
+                || (err.response?.data?.errors && Object.values(err.response.data.errors).join(', '))
+                || 'Something went wrong.';
+            setError(msg);
+        },
     });
+
+    const handleSubmit = () => {
+        if (!form.name.trim()) {
+            setError('Product name is required.');
+            return;
+        }
+        save.mutate(form);
+    };
 
     const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
@@ -64,29 +77,17 @@ export default function ProductForm({ product, onClose, onSaved }) {
                         </div>
                         <div>
                             <label className="form-label">Category</label>
-                            <input
-                                list="product-cat-list"
-                                className="field"
-                                value={form.category}
-                                onChange={e => set('category', e.target.value)}
-                                placeholder="Select or type…"
-                            />
-                            <datalist id="product-cat-list">
-                                {productCategories.map(c => <option key={c} value={c} />)}
-                            </datalist>
+                            <select className="field" value={form.category} onChange={e => set('category', e.target.value)}>
+                                <option value="">Select category</option>
+                                {productCategories.map(c => <option key={c} value={c}>{c}</option>)}
+                            </select>
                         </div>
                         <div>
                             <label className="form-label">Unit</label>
-                            <input
-                                list="product-unit-list"
-                                className="field"
-                                value={form.unit}
-                                onChange={e => set('unit', e.target.value)}
-                                placeholder="pcs"
-                            />
-                            <datalist id="product-unit-list">
-                                {units.map(u => <option key={u} value={u} />)}
-                            </datalist>
+                            <select className="field" value={form.unit} onChange={e => set('unit', e.target.value)}>
+                                <option value="">Select unit</option>
+                                {units.map(u => <option key={u} value={u}>{u}</option>)}
+                            </select>
                         </div>
                         <div>
                             <label className="form-label">Reorder Level</label>
@@ -118,7 +119,7 @@ export default function ProductForm({ product, onClose, onSaved }) {
                 {/* Footer */}
                 <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, padding: '20px 24px' }}>
                     <button onClick={onClose} className="btn btn-ghost">Cancel</button>
-                    <button onClick={() => save.mutate(form)} disabled={save.isPending} className="btn btn-primary">
+                    <button onClick={handleSubmit} disabled={save.isPending} className="btn btn-primary">
                         {save.isPending ? 'Saving…' : 'Save'}
                     </button>
                 </div>

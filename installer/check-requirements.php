@@ -1,6 +1,6 @@
 <?php
 /**
- * CRAMS — Server Requirements Checker
+ * InventoryOS — Server Requirements Checker
  * Drop this file in your web root, visit it in a browser,
  * then delete it once you confirm everything passes.
  */
@@ -13,11 +13,11 @@ function check(string $label, bool $ok, string $fix = ''): array {
 }
 
 // PHP version
-$phpOk = version_compare(PHP_VERSION, '8.2.0', '>=');
+$phpOk = version_compare(PHP_VERSION, '8.3.0', '>=');
 $checks[] = check(
-    'PHP ' . PHP_VERSION . ' (requires 8.2+)',
+    'PHP ' . PHP_VERSION . ' (requires 8.3+)',
     $phpOk,
-    'Upgrade PHP to 8.2 or higher. Contact your host or use a PHP version manager.'
+    'Upgrade PHP to 8.3 or higher. Contact your host or use a PHP version manager.'
 );
 
 // Required extensions
@@ -92,7 +92,7 @@ if (!$phpOk) $pass = false;
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CRAMS — Server Requirements Check</title>
+<title>InventoryOS — Server Requirements Check</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: system-ui, -apple-system, sans-serif; background: #f1f5f9; color: #1e293b; padding: 2rem; }
@@ -118,13 +118,13 @@ if (!$phpOk) $pass = false;
 <body>
 <div class="card">
   <div class="header">
-    <h1>CRAMS — Server Requirements</h1>
-    <p>Verify your server is ready before installing CRAMS</p>
+    <h1>InventoryOS — Server Requirements</h1>
+    <p>Verify your server is ready before installing InventoryOS</p>
   </div>
 
   <div class="banner <?= $pass ? 'pass' : 'fail' ?>">
     <?= $pass
-        ? '✓ All requirements met — ready to install CRAMS'
+        ? '✓ All requirements met — ready to install InventoryOS'
         : '✗ Some requirements are not met — review the items below' ?>
   </div>
 

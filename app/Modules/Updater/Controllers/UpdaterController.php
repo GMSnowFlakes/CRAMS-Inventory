@@ -24,7 +24,7 @@ class UpdaterController extends Controller
     public function check(): JsonResponse
     {
         try {
-            $response = Http::withHeaders(['User-Agent' => 'CRAMS-Updater/1.0'])
+            $response = Http::withHeaders(['User-Agent' => 'InventoryOS-Updater/1.0'])
                 ->timeout(10)
                 ->get("https://api.github.com/repos/{$this->repo}/releases/latest");
 
@@ -63,7 +63,7 @@ class UpdaterController extends Controller
 
         try {
             // 1. Download zip
-            $response = Http::withHeaders(['User-Agent' => 'CRAMS-Updater/1.0'])
+            $response = Http::withHeaders(['User-Agent' => 'InventoryOS-Updater/1.0'])
                 ->timeout(120)
                 ->get($zipUrl);
 

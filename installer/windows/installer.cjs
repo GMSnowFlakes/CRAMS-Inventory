@@ -1,5 +1,5 @@
 /**
- * CRAMS Inventory — Windows Installer
+ * InventoryOS — Windows Installer
  * Compile to .exe: node build.cjs
  */
 
@@ -66,7 +66,7 @@ const askDefault = async (q, def) => {
 };
 
 // ── PHP detection & install ───────────────────────────────
-const PHP_DIR     = 'C:\\crams-php';
+const PHP_DIR     = 'C:\\inventoryos-php';
 const PHP_EXE     = path.join(PHP_DIR, 'php.exe');
 const PHP_VERSION = '8.3.21';
 const PHP_URL     = `https://windows.php.net/downloads/releases/php-${PHP_VERSION}-nts-Win32-vs16-x64.zip`;
@@ -145,7 +145,7 @@ async function installPhp() {
         .replace('upload_max_filesize = 2M','upload_max_filesize = 10M')
         .replace('post_max_size = 8M',      'post_max_size = 10M');
     fs.writeFileSync(iniDst, ini);
-    ok('PHP 8.3 installed to C:\\crams-php');
+    ok('PHP 8.3 installed to C:\\inventoryos-php');
     return PHP_EXE;
 }
 
@@ -163,11 +163,11 @@ async function main() {
     console.clear();
     console.log(`${C.bold}`);
     console.log('  ╔══════════════════════════════════════════════╗');
-    console.log('  ║        CRAMS Inventory Platform              ║');
+    console.log('  ║        InventoryOS Platform                  ║');
     console.log('  ║            Windows Installer                 ║');
     console.log('  ╚══════════════════════════════════════════════╝');
     console.log(`${C.reset}`);
-    console.log('  Welcome! This wizard will install CRAMS on your computer.');
+    console.log('  Welcome! This wizard will install InventoryOS on your computer.');
     console.log('  Estimated time: 2–4 minutes.\n');
     await ask('Press ENTER to begin or close this window to cancel... ');
 
@@ -188,8 +188,8 @@ async function main() {
     // ── Step 2: Install location ──────────────────────────
     step('2/6', 'Installation Folder');
 
-    const defaultDir = 'C:\\CRAMS';
-    let installDir = await askDefault('Where should CRAMS be installed?', defaultDir);
+    const defaultDir = 'C:\\InventoryOS';
+    let installDir = await askDefault('Where should InventoryOS be installed?', defaultDir);
     installDir = installDir.replace(/['"]/g, '').trim();
 
     if (fs.existsSync(installDir) && fs.readdirSync(installDir).length > 0) {
@@ -205,10 +205,10 @@ async function main() {
     step('3/6', 'Extracting Application');
 
     const scriptDir = path.dirname(process.execPath || __filename);
-    const appZip = path.join(scriptDir, 'crams-app.zip');
+    const appZip = path.join(scriptDir, 'inventoryos-app.zip');
 
     if (!fs.existsSync(appZip)) {
-        fail('crams-app.zip not found next to the installer. Please re-download the installer package.');
+        fail('inventoryos-app.zip not found next to the installer. Please re-download the installer package.');
     }
 
     info('Extracting files...');
@@ -224,7 +224,7 @@ async function main() {
     fs.writeFileSync(path.join(dbDir, 'database.sqlite'), '');
 
     const env = [
-        'APP_NAME=CRAMS',
+        'APP_NAME=InventoryOS',
         'APP_ENV=production',
         `APP_KEY=${appKey}`,
         'APP_DEBUG=false',
@@ -279,11 +279,11 @@ async function main() {
     ok('Admin account created');
 
     // Create launcher batch file
-    const launcherPath = path.join(installDir, 'Start CRAMS.bat');
+    const launcherPath = path.join(installDir, 'Start InventoryOS.bat');
     const launcherContent = [
         '@echo off',
         `cd /d "${installDir}"`,
-        'echo Starting CRAMS...',
+        'echo Starting InventoryOS...',
         `start "" http://localhost:8080`,
         `"${phpExe}" artisan serve --port=8080 --no-interaction`,
     ].join('\r\n');
@@ -293,17 +293,17 @@ async function main() {
     const desktop = path.join(os.homedir(), 'Desktop');
     const shortcutScript = `
 $WshShell = New-Object -comObject WScript.Shell
-$Shortcut = $WshShell.CreateShortcut("${path.join(desktop, 'Start CRAMS.lnk').replace(/\\/g, '\\\\')}")
+$Shortcut = $WshShell.CreateShortcut("${path.join(desktop, 'Start InventoryOS.lnk').replace(/\\/g, '\\\\')}")
 $Shortcut.TargetPath = "${launcherPath.replace(/\\/g, '\\\\')}"
 $Shortcut.WorkingDirectory = "${installDir.replace(/\\/g, '\\\\')}"
-$Shortcut.Description = "Start CRAMS Inventory"
+$Shortcut.Description = "Start InventoryOS"
 $Shortcut.Save()
 `;
     try {
         execSync(`powershell -Command "${shortcutScript.replace(/\n/g, ' ')}"`, { stdio: 'ignore' });
         ok('Desktop shortcut created');
     } catch {
-        warn('Could not create desktop shortcut — use Start CRAMS.bat directly');
+        warn('Could not create desktop shortcut — use Start InventoryOS.bat directly');
     }
 
     ok(`Launcher saved to: ${launcherPath}`);
@@ -316,15 +316,15 @@ $Shortcut.Save()
     console.log('  ║        Installation Complete! ✓              ║');
     console.log('  ╚══════════════════════════════════════════════╝');
     console.log(`${C.reset}`);
-    console.log('  To start CRAMS:');
-    console.log(`  ${C.bold}Double-click "Start CRAMS" on your Desktop${C.reset}`);
+    console.log('  To start InventoryOS:');
+    console.log(`  ${C.bold}Double-click "Start InventoryOS" on your Desktop${C.reset}`);
     console.log('');
     console.log(`  Then open: ${C.cyan}${C.bold}http://localhost:8080${C.reset}`);
     console.log(`  Login with: ${adminEmail}`);
     console.log('');
 
     // Auto-launch
-    const launch = await ask('Start CRAMS now? (yes/no) [yes]: ');
+    const launch = await ask('Start InventoryOS now? (yes/no) [yes]: ');
     if (!launch.trim() || launch.toLowerCase().startsWith('y')) {
         execSync(`start "" "${launcherPath}"`, { shell: true, stdio: 'ignore' });
     }

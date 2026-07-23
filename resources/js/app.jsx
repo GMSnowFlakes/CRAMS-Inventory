@@ -6,8 +6,8 @@ import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import ProtectedRoute from './components/ProtectedRoute';
-import LicenseGate from './components/LicenseGate';
 import Login from './pages/Login';
+import Demo from './pages/Demo';
 import Dashboard from './pages/Dashboard';
 import ProductsPage from './pages/products/ProductsPage';
 import SuppliersPage from './pages/suppliers/SuppliersPage';
@@ -19,7 +19,6 @@ import PurchaseOrdersPage from './pages/purchase-orders/PurchaseOrdersPage';
 import StockCountPage from './pages/stock-count/StockCountPage';
 import AuditLogsPage from './pages/audit-logs/AuditLogsPage';
 import TransferOrdersPage from './pages/transfer-orders/TransferOrdersPage';
-import ActivatePage from './pages/activate/ActivatePage';
 import SettingsPage from './pages/settings/SettingsPage';
 import CustomersPage from './pages/customers/CustomersPage';
 import SalesPage from './pages/sales/SalesPage';
@@ -53,35 +52,36 @@ createRoot(document.getElementById('app')).render(
                 <BrowserRouter>
                     <Routes>
                         <Route path="/login"    element={<Login />} />
-                        <Route path="/activate" element={<ProtectedRoute><ActivatePage /></ProtectedRoute>} />
+                        <Route path="/demo"      element={<Demo />} />
                         <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                        <Route path="/dashboard"       element={<ProtectedRoute><LicenseGate><Dashboard /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/products/*"      element={<ProtectedRoute><LicenseGate><ProductsPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/suppliers/*"     element={<ProtectedRoute><LicenseGate><SuppliersPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/inventory/*"     element={<ProtectedRoute><LicenseGate><InventoryPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/reports/*"       element={<ProtectedRoute><LicenseGate><ReportsPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/users/*"         element={<ProtectedRoute><LicenseGate><UsersPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/branches/*"      element={<ProtectedRoute><LicenseGate><BranchesPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/purchase-orders/*" element={<ProtectedRoute><LicenseGate><PurchaseOrdersPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/stock-counts/*"  element={<ProtectedRoute><LicenseGate><StockCountPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/audit-logs/*"    element={<ProtectedRoute><LicenseGate><AuditLogsPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/transfer-orders/*" element={<ProtectedRoute><LicenseGate><TransferOrdersPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/settings/*"      element={<ProtectedRoute><LicenseGate><SettingsPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/customers/*"     element={<ProtectedRoute><LicenseGate><CustomersPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/sales/*"         element={<ProtectedRoute><LicenseGate><SalesPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/pos/*"           element={<ProtectedRoute><LicenseGate><POSPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/expenses/*"      element={<ProtectedRoute><LicenseGate><ExpensesPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/industry-kits/*" element={<ProtectedRoute><LicenseGate><KitSelectorPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/forecasting/*"   element={<ProtectedRoute><LicenseGate><ForecastingPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/dna-scores/*"    element={<ProtectedRoute><LicenseGate><DnaScorePage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/health-score/*"  element={<ProtectedRoute><LicenseGate><HealthScorePage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/simulator/*"     element={<ProtectedRoute><LicenseGate><SimulatorPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/approvals/*"       element={<ProtectedRoute><LicenseGate><ApprovalsPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/compliance/*"      element={<ProtectedRoute><LicenseGate><CompliancePage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/recalls/*"         element={<ProtectedRoute><LicenseGate><RecallsPage /></LicenseGate></ProtectedRoute>} />
-                        <Route path="/supplier-portal/*" element={<ProtectedRoute><LicenseGate><SupplierPortalPage /></LicenseGate></ProtectedRoute>} />
+                        <Route path="/dashboard"       element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                        <Route path="/products/*"      element={<ProtectedRoute><ProductsPage /></ProtectedRoute>} />
+                        <Route path="/suppliers/*"     element={<ProtectedRoute><SuppliersPage /></ProtectedRoute>} />
+                        <Route path="/inventory/*"     element={<ProtectedRoute><InventoryPage /></ProtectedRoute>} />
+                        <Route path="/reports/*"       element={<ProtectedRoute><ReportsPage /></ProtectedRoute>} />
+                        <Route path="/users/*"         element={<ProtectedRoute><UsersPage /></ProtectedRoute>} />
+                        <Route path="/branches/*"      element={<ProtectedRoute><BranchesPage /></ProtectedRoute>} />
+                        <Route path="/purchase-orders/*" element={<ProtectedRoute><PurchaseOrdersPage /></ProtectedRoute>} />
+                        <Route path="/stock-counts/*"  element={<ProtectedRoute><StockCountPage /></ProtectedRoute>} />
+                        <Route path="/audit-logs/*"    element={<ProtectedRoute><AuditLogsPage /></ProtectedRoute>} />
+                        <Route path="/transfer-orders/*" element={<ProtectedRoute><TransferOrdersPage /></ProtectedRoute>} />
+                        <Route path="/transfers/*" element={<Navigate to="/transfer-orders" replace />} />
+                        <Route path="/settings/*"      element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+                        <Route path="/customers/*"     element={<ProtectedRoute><CustomersPage /></ProtectedRoute>} />
+                        <Route path="/sales/*"         element={<ProtectedRoute><SalesPage /></ProtectedRoute>} />
+                        <Route path="/pos/*"           element={<ProtectedRoute><POSPage /></ProtectedRoute>} />
+                        <Route path="/expenses/*"      element={<ProtectedRoute><ExpensesPage /></ProtectedRoute>} />
+                        <Route path="/industry-kits/*" element={<ProtectedRoute><KitSelectorPage /></ProtectedRoute>} />
+                        <Route path="/forecasting/*"   element={<ProtectedRoute><ForecastingPage /></ProtectedRoute>} />
+                        <Route path="/dna-scores/*"    element={<ProtectedRoute><DnaScorePage /></ProtectedRoute>} />
+                        <Route path="/health-score/*"  element={<ProtectedRoute><HealthScorePage /></ProtectedRoute>} />
+                        <Route path="/simulator/*"     element={<ProtectedRoute><SimulatorPage /></ProtectedRoute>} />
+                        <Route path="/approvals/*"       element={<ProtectedRoute><ApprovalsPage /></ProtectedRoute>} />
+                        <Route path="/compliance/*"      element={<ProtectedRoute><CompliancePage /></ProtectedRoute>} />
+                        <Route path="/recalls/*"         element={<ProtectedRoute><RecallsPage /></ProtectedRoute>} />
+                        <Route path="/supplier-portal/*" element={<ProtectedRoute><SupplierPortalPage /></ProtectedRoute>} />
                         <Route path="/supplier-portal/:token" element={<SupplierPortalView />} />
-                        <Route path="/franchise/*" element={<ProtectedRoute><LicenseGate><FranchisePage /></LicenseGate></ProtectedRoute>} />
+                        <Route path="/franchise/*" element={<ProtectedRoute><FranchisePage /></ProtectedRoute>} />
                         <Route path="/updates"         element={<ProtectedRoute><UpdaterPage /></ProtectedRoute>} />
                         <Route path="/profile"         element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
                     </Routes>

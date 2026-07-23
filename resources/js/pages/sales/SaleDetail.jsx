@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../../api/client';
 import { useToast } from '../../context/ToastContext';
+import { printDocument } from '../../utils/printTemplate';
 
 const STATUS_BADGE = {
     draft:     'badge-gray',
@@ -53,32 +54,35 @@ export default function SaleDetail({ id, onClose }) {
     };
 
     const handlePrint = () => {
-        const content = document.getElementById('invoice-print-content');
-        if (!content) return;
-        const w = window.open('', '_blank', 'width=800,height=600');
-        w.document.write(`<!DOCTYPE html><html><head><title>Invoice ${sale.invoice_number}</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: Arial, sans-serif; font-size: 13px; color: #111; padding: 32px; }
-  h1 { font-size: 22px; margin-bottom: 4px; }
-  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
-  .badge-paid { background: #d1fae5; color: #065f46; }
-  .badge-confirmed { background: #e0f2fe; color: #0369a1; }
-  .badge-partial { background: #fef3c7; color: #92400e; }
-  .badge-draft { background: #f3f4f6; color: #374151; }
-  .badge-cancelled { background: #fee2e2; color: #991b1b; }
-  table { width: 100%; border-collapse: collapse; margin-top: 16px; }
-  th { background: #f3f4f6; text-align: left; padding: 8px 10px; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; border-bottom: 1px solid #e5e7eb; }
-  td { padding: 8px 10px; border-bottom: 1px solid #f3f4f6; }
-  .totals { margin-top: 16px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-  .totals div { min-width: 240px; display: flex; justify-content: space-between; }
-  .total-row { font-size: 16px; font-weight: 700; border-top: 2px solid #111; padding-top: 6px; }
-  .header { display: flex; justify-content: space-between; margin-bottom: 24px; }
-  .meta { color: #6b7280; font-size: 12px; margin-top: 6px; line-height: 1.6; }
-  @media print { body { padding: 16px; } }
-</style></head><body>${content.innerHTML}</body></html>`);
-        w.document.close();
-        setTimeout(() => { w.focus(); w.print(); }, 250);
+        if (!sale) return;
+        const rows = (sale.items ?? []).map(it => `
+            <tr>
+                <td>${it.product?.name ?? '—'}</td>
+                <td style="text-align:right">${it.quantity}</td>
+                <td style="text-align:right">${Number(it.unit_price ?? 0).toFixed(2)}</td>
+                <td style="text-align:right">${Number(it.total ?? 0).toFixed(2)}</td>
+            </tr>`).join('');
+        const balance = Number(sale.total) - Number(sale.amount_paid);
+        printDocument({
+            title: 'Invoice',
+            subtitle: `${sale.invoice_number} &bull; ${sale.sale_date} &bull; <span class="badge badge-${sale.status}">${sale.status}</span>`,
+            companyName: sale.customer?.name ?? 'Walk-in Customer',
+            body: `
+                <div class="doc-section">
+                    <div class="doc-section-title">Customer</div>
+                    <div>${sale.customer?.name ?? 'Walk-in'}</div>
+                </div>
+                <table><thead><tr>
+                    <th>Product</th><th style="text-align:right">Qty</th><th style="text-align:right">Unit Price</th><th style="text-align:right">Total</th>
+                </tr></thead><tbody>${rows}</tbody></table>
+                <div class="totals">
+                    <div class="row"><span>Subtotal</span><span>${Number(sale.subtotal ?? sale.total ?? 0).toFixed(2)}</span></div>
+                    ${sale.tax_amount ? `<div class="row"><span>Tax</span><span>${Number(sale.tax_amount).toFixed(2)}</span></div>` : ''}
+                    <div class="grand row"><span>Total</span><span>${Number(sale.total).toFixed(2)}</span></div>
+                    <div class="row" style="color:#059669"><span>Paid</span><span>${Number(sale.amount_paid).toFixed(2)}</span></div>
+                    ${balance > 0.01 ? `<div class="row" style="color:#d97706"><span>Balance Due</span><span>${balance.toFixed(2)}</span></div>` : ''}
+                </div>`,
+        });
     };
 
     if (isLoading) return (

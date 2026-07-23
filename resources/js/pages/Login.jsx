@@ -35,17 +35,9 @@ export default function Login() {
                 padding: '48px 48px 40px',
             }}>
                 <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 56 }}>
-                        <div style={{
-                            width: 40, height: 40, borderRadius: 10,
-                            background: 'var(--sidebar-accent)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        }}>
-                            <svg viewBox="0 0 20 20" fill="white" width="20" height="20">
-                                <path d="M3 3a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 13.846 4.632 16 6.414 16H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 5H6.28l-.31-1.243A1 1 0 005 3H3z"/>
-                            </svg>
-                        </div>
-                        <span style={{ color: '#f8fafc', fontWeight: 700, fontSize: '1.125rem', letterSpacing: '-0.02em' }}>CRAMS</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 56 }}>
+                        <img src="/logo.png" alt="InventoryOS" style={{ width: 44, height: 44, borderRadius: 12 }} />
+                        <span style={{ color: '#f8fafc', fontWeight: 700, fontSize: '1.25rem', letterSpacing: '-0.02em' }}>InventoryOS</span>
                     </div>
 
                     <h2 style={{ color: '#f8fafc', fontSize: '1.75rem', fontWeight: 700, lineHeight: 1.2, marginBottom: 16 }}>
@@ -124,7 +116,7 @@ export default function Login() {
                     </form>
 
                     <p style={{ color: 'var(--text-3)', fontSize: '0.75rem', marginTop: 32, textAlign: 'center' }}>
-                        © {new Date().getFullYear()} CRAMS · Inventory Platform
+                        © {new Date().getFullYear()} CRAMS Creative · www.cramscreative.com
                     </p>
                 </div>
             </div>

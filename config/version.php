@@ -2,5 +2,5 @@
 
 return [
     'current' => '1.0.0',
-    'repo'    => 'GMSnowFlakes/CRAMS-Inventory',
+    'repo'    => 'GMSnowFlakes/InventoryOS',
 ];

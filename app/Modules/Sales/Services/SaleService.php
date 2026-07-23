@@ -32,8 +32,8 @@ class SaleService
         if (!empty($filters['search'])) {
             $term = '%' . $filters['search'] . '%';
             $q->where(function ($sub) use ($term) {
-                $sub->where('invoice_number', 'ilike', $term)
-                    ->orWhereHas('customer', fn ($c) => $c->where('name', 'ilike', $term));
+                $sub->where('invoice_number', 'like', $term)
+                    ->orWhereHas('customer', fn ($c) => $c->where('name', 'like', $term));
             });
         }
 

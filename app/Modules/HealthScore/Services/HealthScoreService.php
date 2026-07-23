@@ -62,18 +62,16 @@ class HealthScoreService
         $velocityScore  = min(100, round(($avgUnitsPerDay / max(1, $totalProducts * 0.5)) * 100, 1));
 
         // 5. Purchase order health (15%): % POs received within 7 days
-        $totalPOs = DB::table('purchase_orders')
+        $receivedPOs = DB::table('purchase_orders')
             ->where('company_id', $companyId)
-            ->whereNotNull('received_at')
-            ->count();
-        $onTimePOs = 0;
-        if ($totalPOs > 0) {
-            $onTimePOs = DB::table('purchase_orders')
-                ->where('company_id', $companyId)
-                ->whereNotNull('received_at')
-                ->whereRaw('DATEDIFF(received_at, created_at) <= 7')
-                ->count();
-        }
+            ->whereNotNull('received_date')
+            ->get(['id', 'created_at', 'received_date']);
+
+        $totalPOs  = $receivedPOs->count();
+        $onTimePOs = $receivedPOs->filter(function ($po) {
+            return Carbon::parse($po->received_date)
+                ->diffInDays(Carbon::parse($po->created_at)) <= 7;
+        })->count();
         $poHealthScore = $totalPOs > 0 ? round(($onTimePOs / $totalPOs) * 100, 1) : 50;
 
         $overallScore = round(

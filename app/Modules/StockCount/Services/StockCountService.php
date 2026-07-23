@@ -39,13 +39,17 @@ class StockCountService
 
             if ($branchId) {
                 $stockQuery->where('branch_id', $branchId);
+            } else {
+                // For "All Branches", get distinct products with summed quantities
+                $stockQuery->selectRaw('product_id, SUM(quantity) as total_quantity')
+                    ->groupBy('product_id');
             }
 
             foreach ($stockQuery->get() as $sl) {
                 StockCountItem::create([
                     'stock_count_id' => $count->id,
                     'product_id'     => $sl->product_id,
-                    'system_qty'     => $sl->quantity,
+                    'system_qty'     => $branchId ? $sl->quantity : $sl->total_quantity,
                     'counted_qty'    => null,
                 ]);
             }

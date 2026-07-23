@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'hyperbeam' => [
+        'key' => env('HYPERBEAM_API_KEY'),
+    ],
+
 ];

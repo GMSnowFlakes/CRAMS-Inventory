@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================
-#  CRAMS Inventory — Linux Installer
+#  InventoryOS — Linux Installer
 #  Supports: Ubuntu 20+, Debian 11+, CentOS 8+, RHEL 8+
 # ============================================================
 
@@ -19,11 +19,11 @@ step() { echo -e "\n${BOLD}${CYAN}[$1]${RESET} ${BOLD}$2${RESET}\n$(printf '━%
 clear
 echo -e "${BOLD}"
 echo "  ╔══════════════════════════════════════════════╗"
-echo "  ║        CRAMS Inventory Platform              ║"
+echo "  ║        InventoryOS Platform                  ║"
 echo "  ║              Linux Installer                 ║"
 echo "  ╚══════════════════════════════════════════════╝"
 echo -e "${RESET}"
-echo "  This installer will set up CRAMS on your server."
+echo "  This installer will set up InventoryOS on your server."
 echo "  Estimated time: 2–5 minutes."
 echo ""
 read -rp "  Press ENTER to begin, or Ctrl+C to cancel... "
@@ -78,7 +78,7 @@ ok "Nginx ready"
 # ── Choose install directory ──────────────────────────────
 step "4/7" "Installation location"
 
-DEFAULT_DIR="/var/www/crams"
+DEFAULT_DIR="/var/www/inventoryos"
 read -rp "  Install directory [${DEFAULT_DIR}]: " INSTALL_DIR
 INSTALL_DIR="${INSTALL_DIR:-$DEFAULT_DIR}"
 mkdir -p "$INSTALL_DIR"
@@ -88,10 +88,10 @@ ok "Will install to: $INSTALL_DIR"
 step "5/7" "Extracting application"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-APP_ZIP="$SCRIPT_DIR/crams-app.zip"
+APP_ZIP="$SCRIPT_DIR/inventoryos-app.zip"
 
 if [ ! -f "$APP_ZIP" ]; then
-    fail "crams-app.zip not found next to installer. Re-download the installer package."
+    fail "inventoryos-app.zip not found next to installer. Re-download the installer package."
 fi
 
 info "Extracting files..."
@@ -105,7 +105,7 @@ DB_PATH="$INSTALL_DIR/database/database.sqlite"
 touch "$DB_PATH"
 
 cat > "$INSTALL_DIR/.env" <<EOF
-APP_NAME=CRAMS
+APP_NAME=InventoryOS
 APP_ENV=production
 APP_KEY=$APP_KEY
 APP_DEBUG=false
@@ -153,10 +153,10 @@ php "$INSTALL_DIR/artisan" storage:link --force
 # ── Nginx config ──────────────────────────────────────────
 step "7/7" "Configuring web server"
 
-read -rp "  Port to run CRAMS on [80]: " PORT
+read -rp "  Port to run InventoryOS on [80]: " PORT
 PORT="${PORT:-80}"
 
-cat > /etc/nginx/sites-available/crams <<EOF
+cat > /etc/nginx/sites-available/inventoryos <<EOF
 server {
     listen $PORT;
     server_name _;
@@ -178,7 +178,7 @@ server {
 }
 EOF
 
-ln -sf /etc/nginx/sites-available/crams /etc/nginx/sites-enabled/crams 2>/dev/null || true
+ln -sf /etc/nginx/sites-available/inventoryos /etc/nginx/sites-enabled/inventoryos 2>/dev/null || true
 rm -f /etc/nginx/sites-enabled/default 2>/dev/null || true
 
 systemctl enable php8.3-fpm nginx

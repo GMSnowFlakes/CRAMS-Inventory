@@ -33,7 +33,7 @@ export default function SupplierPortalView() {
             <div style={{ maxWidth: 900, margin: '0 auto' }}>
                 {/* Header */}
                 <div style={{ textAlign: 'center', marginBottom: 40 }}>
-                    <div style={{ fontSize: 32, fontWeight: 800, color: 'var(--indigo)', marginBottom: 4 }}>CRAMS</div>
+                    <div style={{ fontSize: 32, fontWeight: 800, color: 'var(--indigo)', marginBottom: 4 }}>InventoryOS</div>
                     <div style={{ fontSize: 14, color: 'var(--text-3)' }}>Supplier Portal — Read Only</div>
                 </div>
 
@@ -123,7 +123,7 @@ export default function SupplierPortalView() {
                 )}
 
                 <div style={{ textAlign: 'center', marginTop: 48, color: 'var(--text-3)', fontSize: 12 }}>
-                    Powered by CRAMS Inventory · Read-only access
+                    Powered by InventoryOS · Read-only access
                 </div>
             </div>
         </div>
