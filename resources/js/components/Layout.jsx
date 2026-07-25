@@ -88,18 +88,23 @@ export default function Layout({ children }) {
         return () => window.removeEventListener('resize', handler);
     }, []);
 
-    // Close sidebar on nav (mobile)
+    // Close sidebar on nav (mobile) + save scroll position before navigating
     const handleNavClick = () => {
+        if (navRef.current) navScrollRef.current = navRef.current.scrollTop;
         if (isMobile) setMobileOpen(false);
     };
 
-    // Preserve nav scroll position on re-renders
-    const [navScrollTop, setNavScrollTop] = useState(0);
+    // Preserve nav scroll position across route changes
+    // Uses requestAnimationFrame to run AFTER React commits the DOM
+    const navScrollRef = useRef(0);
     useEffect(() => {
-        if (navRef.current) {
-            navRef.current.scrollTop = navScrollTop;
+        if (navRef.current && navScrollRef.current > 0) {
+            const raf = requestAnimationFrame(() => {
+                if (navRef.current) navRef.current.scrollTop = navScrollRef.current;
+            });
+            return () => cancelAnimationFrame(raf);
         }
-    }, [navScrollTop]);
+    }, [pathname]);
 
     const { data: branding } = useQuery({
         queryKey: ['branding'],
@@ -212,7 +217,7 @@ export default function Layout({ children }) {
                 </div>
 
                 {/* Nav */}
-                 <nav ref={navRef} style={{ flex: 1, padding: '12px 10px', overflowY: 'auto' }} onScroll={e => setNavScrollTop(e.target.scrollTop)}>
+                 <nav ref={navRef} style={{ flex: 1, padding: '12px 10px', overflowY: 'auto' }} onScroll={e => navScrollRef.current = e.target.scrollTop}>
                      {nav.filter(({ to }) => {
                         if (to === '/audit-logs' && !can('viewAuditLogs')) return false;
                         if (to === '/settings'   && !can('manageUsers'))   return false;
